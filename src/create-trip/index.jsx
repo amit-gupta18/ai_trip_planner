@@ -3,8 +3,9 @@ import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { useState } from 'react';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { AI_PROMPT, SelectBudgetOptions, SelectTravelList } from "@/constants/options"
+import { SelectBudgetOptions, SelectTravelList } from "@/constants/options"
 import { toast } from 'sonner';
+import { chatSession } from '@/service/AImodal';
 
 
 function CreateTrip() {
@@ -17,22 +18,44 @@ function CreateTrip() {
       ...formData,
       [name]: value
     })
+
   }
 
   useEffect(() => {
     console.log("formData is : ", formData)
   }, [formData])
 
-  const onGenerateTrip = () => {
+  const onGenerateTrip =  async() => {
     if (formData.totalDays > 5) {
       toast("We recommend you to plan a trip for 5 days or less")
     }
-    if(!formData?.location || !formData?.budget || !formData?.traveler || !formData?.totalDays)
-    {
+    if (!formData?.location || !formData?.budget || !formData?.traveler || !formData?.totalDays) {
       toast("Please fill all the Details")
     }
-  }
+    localStorage.setItem('formData', JSON.stringify(formData))
+    // const FINAL_PROMPT = AI_PROMPT
+    // .replace("{formData?.days || 'X'}", formData?.totalDays)
+    // .replace("{formData?.people || 'X'}", formData?.traveler)
+    // .replace("{formData?.destination || 'Unknown Location'}", formData?.location)
+    // .replace("{formData?.budget || 'flexible'}", formData?.budget);
+    // console.log("FINAL_PROMPT is : ", FINAL_PROMPT)
+    const AI_PROMPT = `Generate a detailed ${formData?.totalDays || "X"}-day travel plan for ${formData?.traveler || "X"} people in ${formData?.location || "Unknown Location"} with a ${formData?.budget || "flexible"} budget. Provide:
+      - **Hotel Options**: Name, Address, Price, Image URL, Geo-coordinates, Ratings, and Descriptions.  
+      - **Itinerary**: A structured day-wise plan including:  
+        - Place Name, Description, Image URL, Geo-coordinates.  
+        - Ticket Pricing and Opening Hours.  
+        - Best time to visit each location.  
+        - Travel time between locations.  
+      - **Output Format**: Return the response in structured **JSON format** for easy parsing.`;
 
+    // console.log(AI_PROMPT);
+    console.log("prompt is ", AI_PROMPT)
+
+    const result = await chatSession.sendMessage(AI_PROMPT);
+    console.log(result?.response?.text())
+
+  }
+  
 
 
   return (
@@ -54,8 +77,8 @@ function CreateTrip() {
 
 
         <div className="mb-5">
-          <label className="text-xl font-medium">How many days are you planning your trip?</label>
-          <Input placeholder={'example . 2'} type='number' min="1"
+          <label className="text-xl  font-medium">How many days are you planning your trip?</label>
+          <Input placeholder={'example . 2'} className="mt-3" type='number' min="1"
             onChange={(v) => handleInputChange('totalDays', v.target.value)} />
         </div>
 
