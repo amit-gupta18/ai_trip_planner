@@ -6,6 +6,7 @@ import App from './App.jsx'
 import CreateTrip from './create-trip'
 import Header from './components/custom/header'
 import Footer from './components/custom/footer'
+import { Toaster } from 'sonner'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Header/>
+    <Toaster/>
     <RouterProvider router={router}/>
     <Footer/>
   </StrictMode>,
