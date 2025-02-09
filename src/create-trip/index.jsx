@@ -6,12 +6,26 @@ import { Button } from '../components/ui/button';
 import { SelectBudgetOptions, SelectTravelList } from "@/constants/options"
 import { toast } from 'sonner';
 import { chatSession } from '@/service/AImodal';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { FcGoogle} from 'react-icons/fc'
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+
+
 
 
 function CreateTrip() {
 
   const [place, setPlace] = useState(' ');
   const [formData, setFormData] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false)
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -25,7 +39,36 @@ function CreateTrip() {
     console.log("formData is : ", formData)
   }, [formData])
 
-  const onGenerateTrip =  async() => {
+  const login = useGoogleLogin({
+    onSuccess: (codeRes) =>  GetUserProfile(codeRes),
+    onError: (error) => console.log(error),
+  })
+
+  const GetUserProfile =  (tokenInfo) => {
+    axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${tokenInfo?.access_token}`,
+      {
+        headers: { 
+          Authorization: `Bearer ${tokenInfo?.access_token}` ,
+          Accept: 'application/json' 
+         }
+      }).then((res) =>  {
+        console.log(res);
+        localStorage.setItem('user', JSON.stringify(res.data));
+        setOpenDialog(false);
+        onGenerateTrip();
+      })
+  } 
+
+  const onGenerateTrip = async () => {
+
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user) {
+      // toast("Please Login to Generate Trip")
+      setOpenDialog(true);
+    }
+
+
+
     if (formData.totalDays > 5) {
       toast("We recommend you to plan a trip for 5 days or less")
     }
@@ -33,12 +76,6 @@ function CreateTrip() {
       toast("Please fill all the Details")
     }
     localStorage.setItem('formData', JSON.stringify(formData))
-    // const FINAL_PROMPT = AI_PROMPT
-    // .replace("{formData?.days || 'X'}", formData?.totalDays)
-    // .replace("{formData?.people || 'X'}", formData?.traveler)
-    // .replace("{formData?.destination || 'Unknown Location'}", formData?.location)
-    // .replace("{formData?.budget || 'flexible'}", formData?.budget);
-    // console.log("FINAL_PROMPT is : ", FINAL_PROMPT)
     const AI_PROMPT = `Generate a detailed ${formData?.totalDays || "X"}-day travel plan for ${formData?.traveler || "X"} people in ${formData?.location || "Unknown Location"} with a ${formData?.budget || "flexible"} budget. Provide:
       - **Hotel Options**: Name, Address, Price, Image URL, Geo-coordinates, Ratings, and Descriptions.  
       - **Itinerary**: A structured day-wise plan including:  
@@ -47,15 +84,12 @@ function CreateTrip() {
         - Best time to visit each location.  
         - Travel time between locations.  
       - **Output Format**: Return the response in structured **JSON format** for easy parsing.`;
-
-    // console.log(AI_PROMPT);
-    console.log("prompt is ", AI_PROMPT)
-
+    console.log("prompt is ", AI_PROMPT) 
     const result = await chatSession.sendMessage(AI_PROMPT);
-    console.log(result?.response?.text())
+    // console.log(result?.response?.text())    
 
   }
-  
+
 
 
   return (
@@ -120,6 +154,19 @@ function CreateTrip() {
       <div className="mt-10 flex justify-end">
         <Button onClick={onGenerateTrip} >Generate Trip</Button>
       </div>
+      <Dialog open={openDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogDescription>
+              <img className='w-12 h-12' src="/logo.jpg" alt="" />
+              <h2 className='font-bold text-lg mt-8'>Sign In with Google</h2>
+              <p>Sign in to the app with google authentication securely. </p>
+
+              <Button className="w-full mt-5"  onClick={login}> <FcGoogle  />Sign in with google</Button>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
