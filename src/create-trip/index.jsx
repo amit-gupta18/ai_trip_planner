@@ -1,6 +1,7 @@
 import React, { useEffect, useSyncExternalStore } from 'react'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { SelectBudgetOptions, SelectTravelList } from "@/constants/options"
@@ -29,6 +30,10 @@ function CreateTrip() {
   const [formData, setFormData] = useState([]);
   const [openDialog, setOpenDialog] = useState(false)
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -108,6 +113,7 @@ function CreateTrip() {
       id: docId
     });
     setLoading(false);
+    navigate(`/view-trip/${docId}`)
   }
 
 
