@@ -178,7 +178,7 @@ function CreateTrip() {
 
       <div className="mt-10 flex justify-end">
         <Button onClick={onGenerateTrip} disabled={loading}>
-          { loading ? <AiOutlineLoading3Quarters className=" h-10 w-10 animate-spin"/> : "Generate Trip"}</Button>
+          {loading ? <AiOutlineLoading3Quarters className=" h-10 w-10 animate-spin" /> : "Generate Trip"}</Button>
       </div>
       <Dialog open={openDialog}>
         <DialogContent>
@@ -188,8 +188,8 @@ function CreateTrip() {
               <h2 className='font-bold text-lg mt-8'>Sign In with Google</h2>
               <p>Sign in to the app with google authentication securely. </p>
 
-              <Button  className="w-full mt-5" onClick={login}>
-                  <FcGoogle />Sign in with google
+              <Button className="w-full mt-5" onClick={login}>
+                <FcGoogle />Sign in with google
               </Button>
             </DialogDescription>
           </DialogHeader>

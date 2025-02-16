@@ -7,6 +7,7 @@ import { db } from '@/service/firebaseconfig';
 import InfoSection from '../components/InfoSection';
 import { useState } from 'react';
 import { Info } from 'lucide-react';
+import Hotel from '../components/Hotels';
 function Viewtrip() {
     const {tripId} = useParams();
     const[trip , setTrip] = useState([]);
@@ -37,7 +38,7 @@ function Viewtrip() {
             <InfoSection trip={trip}/>
 
         {/* Recommended hotels */}
-
+            <Hotel trip={trip}/>
 
         {/*Daily plan */}
 
