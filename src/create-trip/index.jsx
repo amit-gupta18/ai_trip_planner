@@ -72,22 +72,20 @@ function CreateTrip() {
   const onGenerateTrip = async () => {
 
     const user = JSON.parse(localStorage.getItem('user'))
-    if (!user) {
-      // toast("Please Login to Generate Trip")
-      setOpenDialog(true);
-    }
-
-
-
     if (formData.totalDays > 5) {
       toast("We recommend you to plan a trip for 5 days or less")
     }
     if (!formData?.location || !formData?.budget || !formData?.traveler || !formData?.totalDays) {
       toast("Please fill all the Details")
     }
-    localStorage.setItem('formData', JSON.stringify(formData))
-    setLoading(true);
-    const AI_PROMPT = `Generate a detailed ${formData?.totalDays || "X"}-day travel plan for ${formData?.traveler || "X"} people in ${formData?.location || "Unknown Location"} with a ${formData?.budget || "flexible"} budget. Provide:
+    if (!user) {
+      // toast("Please Login to Generate Trip")
+      setOpenDialog(true);
+    }
+    else {
+      localStorage.setItem('formData', JSON.stringify(formData))
+      setLoading(true);
+      const AI_PROMPT = `Generate a detailed ${formData?.totalDays || "X"}-day travel plan for ${formData?.traveler || "X"} people in ${formData?.location || "Unknown Location"} with a ${formData?.budget || "flexible"} budget. Provide:
       - **Hotel Options**: Name, Address, Price, Image URL, Geo-coordinates, Ratings, and Descriptions.  
       - **Itinerary**: A structured day-wise plan including:  
         - Place Name, Description, Image URL, Geo-coordinates.  
@@ -189,13 +187,16 @@ function CreateTrip() {
   }
 ]
       - **Output Format**: Return the response in structured **JSON format** for easy parsing.`;
-    console.log("prompt is ", AI_PROMPT)
-    const result = await chatSession.sendMessage(AI_PROMPT);
-    console.log("--", result?.response?.text())
-    setLoading(false);
-    saveAiTrip(result?.response?.text())
+      console.log("prompt is ", AI_PROMPT)
+      const result = await chatSession.sendMessage(AI_PROMPT);
+      console.log("--", result?.response?.text())
+      setLoading(false);
+      saveAiTrip(result?.response?.text())
+    }
   }
+
   const saveAiTrip = async (TripData) => {
+
     setLoading(true);
     const user = JSON.parse(localStorage.getItem('user'))
     const docId = Date.now().toString();
@@ -208,7 +209,11 @@ function CreateTrip() {
     });
     setLoading(false);
     navigate(`/view-trip/${docId}`)
+
   }
+
+
+
 
 
   return (
