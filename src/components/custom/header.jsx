@@ -49,7 +49,9 @@ function Header() {
   }
   return (
     <div className='flex justify-between items-center p-4'>
+      <a href="/">
       <img src="/travel.png" alt="logo" className='w-12 h-12' />
+      </a>
       <div>
         <div>
           {user ? (
