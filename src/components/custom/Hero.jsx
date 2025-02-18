@@ -14,7 +14,7 @@ function Hero() {
         <Button>Get Started, It's Free.</Button>
       </Link> 
 
-      <img src='/footer_image.jpg' className='-mt-30 rounded-2xl w-[800px] h-[400px]'/>
+      <img src='/mountains.webp' className='-mt-30 rounded-2xl w-[800px] h-[400px]'/>
   </div>
   )
 }

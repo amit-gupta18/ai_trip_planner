@@ -18,12 +18,13 @@ import {
 import { FcGoogle } from 'react-icons/fc'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 
 
 function Header() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
-  const[openDialog , setOpenDialog] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     setUser(storedUser);
@@ -55,7 +56,12 @@ function Header() {
           {user ? (
             <div className='flex items-center gap-2'>
               {/* {user.name} */}
-              <Button variant='outline'>My Trips  </Button>
+              <a href='/create-trip'>
+                <Button className="rounded-3xl border-orange-400" variant='outline'> + Create Trips  </Button>
+              </a>
+              <a href='/my-trips'>
+                <Button className="rounded-3xl border-orange-400" variant='outline'>My Trips  </Button>
+              </a>
               <Popover>
                 <PopoverTrigger> <img src={user.picture} alt="user" className='w-8 h-8 rounded-full' /></PopoverTrigger>
                 <PopoverContent>
