@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 function Hotels({ trip }) {
-    // console.log(' final check for all the hotel options here   : ', trip?.tripData[0]?.travelPlan?.hotelOptions);
-
     return (
         <div>
             <h2 className='font-bold text-xl my-7'>Hotel Recommendation</h2>

@@ -6,17 +6,13 @@ import { doc} from 'firebase/firestore';
 import { db } from '@/service/firebaseconfig';
 import InfoSection from '../components/InfoSection';
 import { useState } from 'react';
-import { Info } from 'lucide-react';
 import Hotel from '../components/Hotels';
 import PlacesToVisit from '../components/PlacesToVisit';
 import Footer from '../components/Footer';
 function Viewtrip() {
     const {tripId} = useParams();
     const[trip , setTrip] = useState([]);
-
-    // console.log("tripId is : ", tripId);
     useEffect(() => {
-        console.log("tripId is : ", tripId);
         tripId && GetTripData();
     }, [tripId]) 
     const GetTripData = async() => {
@@ -24,12 +20,12 @@ function Viewtrip() {
         const docSnap = await getDoc(docRef);
         if(docSnap.exists())
         {
-            console.log("Document data : ", docSnap.data());
+           
             setTrip(docSnap.data());
         }
         else
         {
-            console.log("No such document exists");
+            
             toast('No such trip found');
         }
     }

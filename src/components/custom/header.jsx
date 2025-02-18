@@ -24,10 +24,10 @@ import { Link } from 'react-router-dom'
 function Header() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const [openDialog, setOpenDialog] = useState(false);
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     setUser(storedUser);
-    console.log("user is : ", storedUser);
   }, []);
   const login = useGoogleLogin({
     onSuccess: (codeRes) => GetUserProfile(codeRes),
@@ -41,7 +41,6 @@ function Header() {
           Accept: 'application/json'
         }
       }).then((res) => {
-        console.log(res);
         localStorage.setItem('user', JSON.stringify(res.data));
         setOpenDialog(false);
         window.location.reload();
@@ -50,7 +49,7 @@ function Header() {
   return (
     <div className='flex justify-between items-center p-4'>
       <a href="/">
-      <img src="/travel.png" alt="logo" className='w-12 h-12' />
+      <img src="/travel.png" alt="logo" className='w-16 h-16' />
       </a>
       <div>
         <div>
@@ -84,11 +83,11 @@ function Header() {
           )}
         </div>
       </div>
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
-              <img className='w-12 h-12' src="/logo.jpg" alt="" />
+              <img className='w-12 h-12' src="/travel.png" alt="" />
               <h2 className='font-bold text-lg mt-8'>Sign In with Google</h2>
               <p>Sign in to the app with google authentication securely. </p>
 

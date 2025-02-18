@@ -44,7 +44,7 @@ function CreateTrip() {
   }
 
   useEffect(() => {
-    console.log("formData is : ", formData)
+    // console.log("formData is : ", formData)
   }, [formData])
 
   const login = useGoogleLogin({
@@ -60,7 +60,7 @@ function CreateTrip() {
           Accept: 'application/json'
         }
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         localStorage.setItem('user', JSON.stringify(res.data));
         setOpenDialog(false);
         onGenerateTrip();
@@ -79,7 +79,7 @@ function CreateTrip() {
       toast("Please fill all the Details")
     }
     if (!user) {
-      // toast("Please Login to Generate Trip")
+      
       setOpenDialog(true);
     }
     else {
@@ -187,9 +187,7 @@ function CreateTrip() {
   }
 ]
       - **Output Format**: Return the response in structured **JSON format** for easy parsing.`;
-      console.log("prompt is ", AI_PROMPT)
       const result = await chatSession.sendMessage(AI_PROMPT);
-      console.log("--", result?.response?.text())
       setLoading(false);
       saveAiTrip(result?.response?.text())
     }
@@ -227,7 +225,7 @@ function CreateTrip() {
         <div className="mb-5">
           <label className="text-xl mb-3 font-medium">What is destination of choice?</label>
           {/* is google placesautocomplete ka kaam bas itna  hai ki jo bhi location ko type karte rahenge toh niche dropdowm me list aata rahega realted to it . */}
-          <input type="text" placeholder="Type here..." value={place} onChange={(e) => { setPlace(e.target.value); handleInputChange("location", e.target.value); console.log("value is ", e.target.value) }} className="w-full p-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black" />
+          <input type="text" placeholder="Type here..." value={place} onChange={(e) => { setPlace(e.target.value); handleInputChange("location", e.target.value); }} className="w-full p-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black" />
           {/* <GooglePlacesAutocomplete
             apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY} 
           /> */}
@@ -279,11 +277,11 @@ function CreateTrip() {
         <Button onClick={onGenerateTrip} disabled={loading}>
           {loading ? <AiOutlineLoading3Quarters className=" h-10 w-10 animate-spin" /> : "Generate Trip"}</Button>
       </div>
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog} >
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
-              <img className='w-12 h-12' src="/logo.jpg" alt="" />
+              <img className='w-12 h-12' src="/travel.png" alt="" />
               <h2 className='font-bold text-lg mt-8'>Sign In with Google</h2>
               <p>Sign in to the app with google authentication securely. </p>
 

@@ -4,9 +4,6 @@ import React from 'react'
 
 
 function InfoSection({ trip }) {
-  console.log('trip', trip)
-  
-
   return (
     <div>
       <img src="/road-trip-vacation.jpg"  className='h-[330px] w-full object-cover rounded-xl'/>

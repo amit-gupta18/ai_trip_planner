@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 function UserTripCardItem({ trip }) {
-    console.log("trip in usercarditem is ", trip);
     return (
         <Link to={`/view-trip/${trip?.id}`} >
             <div className='mt-10 hover:shadow-lg hover:scale-105 transition-all p-5 bg-white rounded-xl'> 
