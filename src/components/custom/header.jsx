@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import logo from '/logo.jpg'
 import { Button } from '../ui/button'
 import { googleLogout } from '@react-oauth/google'
 import {
@@ -50,7 +49,7 @@ function Header() {
   }
   return (
     <div className='flex justify-between items-center p-4'>
-      <img src={logo} alt="logo" className='w-12 h-12' />
+      <img src="/travel.png" alt="logo" className='w-12 h-12' />
       <div>
         <div>
           {user ? (
